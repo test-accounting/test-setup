@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <center>
+            <h1>OpenID Connect RP Example</h1>
+            <button id="login-button">Login</button>
+        </center>
+
+        {% if user.is_authenticated %}
+            <p>Current user: {{ user.email }}</p>
+            <form action="{% url 'oidc_logout' %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="logout">
+            </form>
+        {% else %}
+            <a href="{% url 'oidc_authentication_init' %}">Login</a>
+        {% endif %}
+
+    </body>
+</html>

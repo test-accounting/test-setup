@@ -1,0 +1,5 @@
+.vscode/
+env/
+*.pyc
+*.sqlite3/
+.coverage
