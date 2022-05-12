@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'shopping_cart.wsgi.application'
     }
 }'''
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         "ENGINE" : os.environ.get("SQL_ENGINE", 'django.db.backends.sqlite3'),
         "NAME" : os.environ.get("SQL_NAME",  BASE_DIR / 'db.sqlite3'),
@@ -100,7 +100,7 @@ DATABASES = {
         "HOST" : os.environ.get("SQL_HOST", "localhost"),
         "PORT" : os.environ.get("SQL_PORT", "5432"),
     }
-}
+}'''
 
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
@@ -111,7 +111,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
-elif (os.environ.get('SQL_POSTGRES') == True):
+else:
     DATABASES = {
         'default': {
             "ENGINE" : os.environ.get("SQL_ENGINE", 'django.db.backends.sqlite3'),
@@ -120,13 +120,6 @@ elif (os.environ.get('SQL_POSTGRES') == True):
             "PASSWORD" : os.environ.get("SQL_PASSWORD", ""),
             "HOST" : os.environ.get("SQL_HOST", ""),
             "PORT" : os.environ.get("SQL_PORT", ""),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
