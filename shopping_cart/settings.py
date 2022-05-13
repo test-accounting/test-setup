@@ -104,12 +104,14 @@ WSGI_APPLICATION = 'shopping_cart.wsgi.application'
 
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'github_actions',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
     }
 else:
     DATABASES = {
