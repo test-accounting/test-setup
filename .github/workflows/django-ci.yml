@@ -13,6 +13,13 @@ jobs:
       max-parallel: 4
       matrix: 
         python-version: [3.7, 3.8, 3.9]
+    env:
+      SECRET_KEY: non-secure-key
+      DEBUG: True
+      ALLOWED_HOSTS: localhost, 127.0.0.1, [::1]
+      NEW_CLIENT_ID: ''
+      NEW_CLIENT_SECRET: ''
+      APIKEY: ''
 
     services:
       postgres:
@@ -49,10 +56,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt 
       - name: Test Migrations
+        env:
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          DEBUG: ${{ env.DEBUG }}
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          NEW_CLIENT_ID: ${{ env.NEW_CLIENT_ID }}
+          NEW_CLIENT_SECRET: ${{ env.NEW_CLIENT_SECRET }}
+          APIKEY: ${{ env.APIKEY }}
         run: |
           python manage.py makemigrations
           python manage.py migrate
       - name: Run tests
+        env:
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          DEBUG: ${{ env.DEBUG }}
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          NEW_CLIENT_ID: ${{ env.NEW_CLIENT_ID }}
+          NEW_CLIENT_SECRET: ${{ env.NEW_CLIENT_SECRET }}
+          APIKEY: ${{ env.APIKEY }}
         run: python manage.py test
           
 
