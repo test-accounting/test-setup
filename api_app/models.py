@@ -9,7 +9,7 @@ class Customer(models.Model):
     phone = models.CharField(max_length=50)
 
     def __str__(self) -> str:
-        return self.id
+        return self.first_name
 
 
 class Order(models.Model):

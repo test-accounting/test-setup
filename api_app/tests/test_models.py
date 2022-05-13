@@ -24,11 +24,10 @@ class CustomerTest(TestCase):
 class OrderTest(TestCase):
     def test_order_fields(self):
         self.assertEquals(Order.objects.count(), 0)
-        customer = Customer(
+        Customer.objects.create(
             first_name='James', last_name='Doe', 
             email="doe@example.com", phone='+254720000000'
         )
-        customer.save()
 
         order = Order(
             customer=Customer.objects.get(id=1) , price=200.00,
