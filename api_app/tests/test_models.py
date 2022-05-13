@@ -31,7 +31,7 @@ class OrderTest(TestCase):
         customer.save()
 
         order = Order(
-            customer=Customer.objects.get(id=1) , price=200.00,
+            customer=customer , price=200.00,
             items = "one two three"
         )
         order.save()

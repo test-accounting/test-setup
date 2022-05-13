@@ -136,7 +136,7 @@ class OrderDetailApiViewTest(APITestCase):
         self.customer.save()
         
         self.order = Order(
-            customer=Customer.objects.get(id=1),
+            customer=self.customer,
             price='3695200.00',
             items='BMW, Honda, Mazda'
         )
