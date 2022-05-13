@@ -127,10 +127,11 @@ class OrderApiViewTest(APITestCase):
 @mock.patch.object(APIView, 'permission_classes', new=[AllowAny])
 class OrderDetailApiViewTest(APITestCase):
     def setUp(self) -> None:        
-        Customer.objects.create(
+        self.customer = Customer(
             first_name='James', last_name='Doe', 
             email="doe@example.com", phone='+254720000000'
         )
+        self.customer.save()
         
         self.order = Order(
             customer=Customer.objects.get(id=1),

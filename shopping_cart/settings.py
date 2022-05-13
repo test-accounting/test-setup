@@ -84,23 +84,13 @@ WSGI_APPLICATION = 'shopping_cart.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-'''DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}'''
+}
 
-'''DATABASES = {
-    'default': {
-        "ENGINE" : os.environ.get("SQL_ENGINE", 'django.db.backends.sqlite3'),
-        "NAME" : os.environ.get("SQL_NAME",  BASE_DIR / 'db.sqlite3'),
-        "USER" : os.environ.get("SQL_USER", "USER"),
-        "PASSWORD" : os.environ.get("SQL_PASSWORD", "password"),
-        "HOST" : os.environ.get("SQL_HOST", "localhost"),
-        "PORT" : os.environ.get("SQL_PORT", "5432"),
-    }
-}'''
 
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
@@ -113,6 +103,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
             'PORT': '5432',
         }
     }
+    '''
 else:
     DATABASES = {
         'default': {
@@ -123,7 +114,7 @@ else:
             "HOST" : os.environ.get("SQL_HOST", ""),
             "PORT" : os.environ.get("SQL_PORT", ""),
         }
-    }
+    }'''
 
 
 # Password validation
@@ -219,10 +210,10 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 '''
 TESTS settings: use nose to run all tests
 '''
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
     # '--cover-html',
-    '--with-coverage',
+    # '--with-coverage',
     '--cover-package=api_app, user_app',
 ]
