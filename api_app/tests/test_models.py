@@ -41,4 +41,3 @@ class OrderTest(TestCase):
 
         order.delete()
         self.assertEquals(Order.objects.count(), 0)
-

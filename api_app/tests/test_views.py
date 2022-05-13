@@ -10,7 +10,6 @@ from api_app.models import Customer, Order
 
 
 @mock.patch.object(APIView, 'permission_classes', new=[AllowAny])
-
 class CustomerApiViewTest(APITestCase):
     def setUp(self) -> None:
         self.url = reverse("customer")
