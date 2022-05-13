@@ -1,8 +1,5 @@
-import logging
 from django.test import TestCase 
 from api_app.models import Customer, Order 
-
-logger = logging.getLogger(__name__)
 
 class CustomerTest(TestCase):
     def test_customer(self):

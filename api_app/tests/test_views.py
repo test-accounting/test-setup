@@ -1,3 +1,4 @@
+import logging
 from unittest import mock
 
 from django.urls import reverse
@@ -8,6 +9,7 @@ from rest_framework.permissions import AllowAny
 
 from api_app.models import Customer, Order
 
+logger = logging.getLogger(__name__)
 
 @mock.patch.object(APIView, 'permission_classes', new=[AllowAny])
 class CustomerApiViewTest(APITestCase):
