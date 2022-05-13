@@ -213,7 +213,7 @@ TESTS settings: use nose to run all tests
 # TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
-    # '--cover-html',
-    # '--with-coverage',
+    '--cover-html',
+    '--with-coverage',
     '--cover-package=api_app, user_app',
 ]
