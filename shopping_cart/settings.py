@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'shopping_cart.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+}'''
 
 
 if os.environ.get('GITHUB_WORKFLOW'):
@@ -103,8 +103,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
             'PORT': '5432',
         }
     }
-    '''
-else:
+elif os.environ['DATABASE'] == 'postgres':
     DATABASES = {
         'default': {
             "ENGINE" : os.environ.get("SQL_ENGINE", 'django.db.backends.sqlite3'),
@@ -114,7 +113,14 @@ else:
             "HOST" : os.environ.get("SQL_HOST", ""),
             "PORT" : os.environ.get("SQL_PORT", ""),
         }
-    }'''
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
