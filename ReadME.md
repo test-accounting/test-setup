@@ -1,56 +1,113 @@
+# Ibuqa API Screening Test
 
-![Architecture Model](/car_position_diagram.png)
+A DjangoREST API with basic CRUD functionalities of adding customers and orders with integrated third party services:
+-   `OpenID Connect`: implements authentication and authorization of users. The provider of choice being [Google](link).
+-   `SMS gateway`: enables sending of SMS alerts triggered by an event(adding an order). Development and testing implemented done in SANDBOX using [Africa's Talking API](link).
+-   `CI/CD`: implements Continous Integration and tests by [GitHub Actions](link).
 
+## Usage
+---
 
+Create a python virtual environment.
+```
+commands
+```
 
-[Car Location Implementation based on Microservices Architecture](https://ehsanasadev.github.io/How_to_use_Spring_and_Kafka_to_build_a_project_based_on_microservices_architecture/)
-
-The goal is to calculate the position of vehicles inside strategic geojson-polygons and serve the cars and polygons via a REST API
-mostly for demonstration purposes!
-
-The implementation consists of Three microservices implemented in Java using Spring Boot and Spring Cloud:
-
--   `car-position-producer`: this microservice has a scheduler for getting car data from an external service and pushing that as an event to the topic of Apache Kafka.
-
--   `car-position-consumer`: this microservice has a Kafka listener which consumes events, determined for each car in which
-    polygon and finally save car with polygon id in MongoDB.
-
--   `car-webservices`: this microservice expose two rest webservice 1)getVehicleByVin 2)getVehiclesByPolygonId
-
-with this approach, you can scale this project just by adding new resources. you can call car data service even each second, produce events for Kafka, run multiple consumers
-how much you need and finally getting the car in which polygon with high accuracy.
-
-Technologies
-------------
-- `Spring Boot`
-- `Spring Cloud`, used for building Microservices applications in Java
-- `Spring MVC`, for creating RESTful API
-- `Apache Kafka`, an open-source distributed event streaming platform
-- `MongoDB`, the most popular NoSQL database for modern apps 
-- `Docker`, for containerization of services
-- `Docker-Compose`, to link the containers
-- `Swagger`, Swagger-UI, for API documentation
+Clone the repository to your local machine
+```
+git clone <repository>
+```
+Add the following key enviromental variables in `.env` file in the root of your project.
+- Google OpenID Connect credentials
+- Africa's talking credentials
+- Database setting for Postgresql
 
 
-### How to launch
+### 1. Using Docker(Preferably)
+---
 
-First, you should build and package jar files with Maven.
+First, you should build/ create image for the application using the `Dockerfile` in the root of the application.
+```
+docker-compose build
+```
 
-//mvn clean package
+Then you launch the application in a detached mode. This will also pull the postgres image from dockerhub registry to be used as the database in your application.
+```
+docker-compose up -d
+```
 
-Then,  I provided a docker file for each microservice, so you should create an image for each microservice.
+Then you run migrations to create the necessary table in the created database.
+```
+docker-compose exec ibuqa python manage.py migrate --noinput
+```
 
-//docker build -t car-position-producer .
+Via the home page http://localhost:8000/ you can access and test the API on your browser.
 
-//docker build -t car-position-consumer .
+Access the database by issuing the following command and applicable parameters:
+```
+docker-compose exec db --username=<> --dbname=<>
+```
 
-//docker build -t car-webservices .
+Your can view the logs of the containers running using:
+```
+docker-compose logs -f
+```
+
+Terminate the application by stopping the containers:
+```
+docker-compose down
+```
+
+When you make the changes in your application you will have to rebuild the image and it is advisable to get rid of the volumes before building new images. This can be done using the following commands:
+```
+docker-compose down -v
+docker-compose up -d --build 
+```
 
 
+### 2. Local environment(Without use of docker)
+---
+Activate virtual environment in the directory with `env` folder.
+```
+. env/bin/activate
+```
 
-Finally, by the docker-compose file, you can launch it.
+Install the requirements; make sure you are in the root folder of the applications to run these commands.
+```
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+Make sure you are connected to the database and it is accepting TCP/IP connection on the specified port if you are using `Postgres` database. You may also use the default `sqlite3` which does not require much configurations and you application will work just fine.
 
-//docker-compose up
+Make and run migrations to fire up the database before starting the application
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+The application will run in the link http://127.0.0.1:8000/ where you can perform various tests on the browser.
 
 
-Via the home page (http://localhost:8083/) you can access with swagger to test APIs.
+## Tests
+---
+Tests are exempted from authentication to ensure that they run successfully. They cover all the API endpoints, CRUD functionalities and related models.
+
+You can perform unit tests with coverage, enabled by the `django_nose` package by running the command:
+```
+python manage.py test
+```
+Add or modify the tests in the `tests` folders inside each app.
+
+Customise how the tests are run by declaring or removing arguements in NOSE_ARGS inside the `settings.py` file.
+
+
+## CI/CD Pipeline
+---
+use github actions
+
+
+## Contribution
+---
+Feel free to fork this repository and modify to your needs.
+
+Happy coding!!!
