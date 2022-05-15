@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import dotenv
 from pathlib import Path
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -223,3 +224,8 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=api_app, user_app',
 ]
+
+'''
+Heroku configs
+'''
+django_heroku.settings(locals())
