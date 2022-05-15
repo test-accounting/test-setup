@@ -23,5 +23,4 @@ workflows:
     when: 
       equal: [ "push", << pipeline.parameters.GHA_Event >>]
     jobs:
-      - heroku/deploy-via-git:
-          force: true
+      - heroku/deploy-via-git
