@@ -87,6 +87,7 @@ jobs:
 
   trigger-circleci:
     runs-on: ubuntu-latest
+    needs: [health-check-job]
     steps:
       - name: CircleCI Trigger on Push
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0
