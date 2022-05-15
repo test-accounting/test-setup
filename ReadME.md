@@ -1,21 +1,22 @@
 # Ibuqa API Screening Test
 
 A DjangoREST API with basic CRUD functionalities of adding customers and orders with integrated third party services:
--   `OpenID Connect`: implements authentication and authorization of users. The provider of choice being [Google](link).
--   `SMS gateway`: enables sending of SMS alerts triggered by an event(adding an order). Development and testing implemented done in SANDBOX using [Africa's Talking API](link).
--   `CI/CD`: implements Continous Integration and tests by [GitHub Actions](link).
+-   `OpenID Connect`: implements authentication and authorization of users. The provider of choice being [Google](https://developers.google.com/identity/protocols/oauth2/openid-connect#python).
+-   `SMS gateway`: enables sending of SMS alerts triggered by an event(adding an order). Development and testing implemented done in SANDBOX using [Africa's Talking API](https://africastalking.com/).
+-   `CI/CD`: implements Continuous Integration, runs tests and Continous Deployment by [GitHub Actions](https://github.com/features/actions).
 
-## Usage
+## Development
 ---
 
 Create a python virtual environment.
+- `Note`: used Ubuntu 20.04 for this project.
 ```
-commands
+python3 -m venv virtual_environment_name
 ```
 
 Clone the repository to your local machine
 ```
-git clone <repository>
+git clone https://github.com/kevogaba/ibuqa-api.git
 ```
 Add the following key enviromental variables in `.env` file in the root of your project.
 - Google OpenID Connect credentials
