@@ -18,8 +18,7 @@ parameters:
 
 orbs:
   heroku: circleci/heroku@0.0.10
-workflows:
-  
+workflows:  
   heroku_deploy:
     when: 
       equal: [ "push", << pipeline.parameters.GHA_Action >>]
