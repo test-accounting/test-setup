@@ -19,6 +19,9 @@ jobs:
           version-file: './my_custom_version_file.json'
           version-path: 'path.to.version'
           git-branch: 'main'
+          git-user-name: 'GitHub Actions'
+          git-user-email: 'kevogaba@gmail.com'
+          
 
       - name: Create Release
         uses: actions/create-release@v1
