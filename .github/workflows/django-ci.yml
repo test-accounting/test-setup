@@ -25,7 +25,7 @@ jobs:
           skip-on-empty: 'false'
           skip-version-file: 'false'
           skip-commit: 'false'
-          git-branch: 'my-maintenance-branch'
+          git-branch: 'main'
 
       - name: Create Release
         uses: actions/create-release@v1
