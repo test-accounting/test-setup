@@ -15,17 +15,7 @@ jobs:
         id: changelog
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          git-message: 'chore(release): {version}'
-          git-user-name: 'Awesome Changelog Action'
-          git-user-email: 'awesome_changelog@github.actions.com'
-          tag-prefix: 'v'
-          output-file: 'MY_CUSTOM_CHANGELOG.md'
-          release-count: '10'
-          version-file: './my_custom_version_file.json'
-          version-path: 'path.to.version'
-          skip-on-empty: 'false'
-          skip-version-file: 'false'
-          skip-commit: 'false'
+          output-file: "false"
           git-branch: 'main'
 
       - name: Create Release
