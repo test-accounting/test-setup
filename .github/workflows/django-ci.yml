@@ -1,117 +1,27 @@
-name: Django CI/CD Workflow
-
+name: Releases
 on:
-  pull_request:
-    branches: [main]
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  health-check-job:
+  changelog:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix: 
-        python-version: [3.7, 3.8, 3.9]
-    env:
-      SECRET_KEY: non-secure-key
-      DEBUG: True
-      ALLOWED_HOSTS: 127.0.0.1
-      NEW_CLIENT_ID: ''
-      NEW_CLIENT_SECRET: ''
-      APIKEY: ''
 
-    services:
-      postgres:
-        image: postgres:14.2-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s
-          --health-retries 5
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Cache Dependency
-        uses: actions/cache@v2
+      - uses: actions/checkout@v2
+      - name: conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3.7.1
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-}-pip-
-      - name: Setup Python ${{ matrix.python-version }} Environment
-        uses: actions/setup-python@v2
+          github-token: ${{ secrets.github_token }}
+
+      - name: create release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: psycopg2 prerequisites
-        run: sudo apt-get install libpq-dev
-      - name: Install Requirements
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt 
-      - name: Test Migrations
-        env:
-          SECRET_KEY: ${{ env.SECRET_KEY }}
-          DEBUG: ${{ env.DEBUG }}
-          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
-          NEW_CLIENT_ID: ${{ env.NEW_CLIENT_ID }}
-          NEW_CLIENT_SECRET: ${{ env.NEW_CLIENT_SECRET }}
-          APIKEY: ${{ env.APIKEY }}
-        run: |
-          python manage.py makemigrations
-          python manage.py migrate
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ env.SECRET_KEY }}
-          DEBUG: ${{ env.DEBUG }}
-          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
-          NEW_CLIENT_ID: ${{ env.NEW_CLIENT_ID }}
-          NEW_CLIENT_SECRET: ${{ env.NEW_CLIENT_SECRET }}
-          APIKEY: ${{ env.APIKEY }}
-        run: python manage.py test          
-
-  package-job:
-    runs-on: ubuntu-latest
-    needs: [health-check-job]
-    if: ${{ github.event_name == 'push' }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-  trigger-circleci:
-    runs-on: ubuntu-latest
-    needs: [health-check-job]
-    steps:
-      - name: CircleCI Trigger on Push
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0
-        env:
-          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
-          
-  new-release:
-      runs-on: ubuntu-latest 
-      steps: 
-        - uses: actions/checkout@v3 # Checkout our working repository 
-        - name: Conventional Changelog Action
-          id: changelog
-          uses: TriPSs/conventional-changelog-action@v3
-          with:
-            github-token: ${{ secrets.github_token }}
-            output-file: "false"
-
-        - name: Create Release
-          uses: actions/create-release@v1
-          if: ${{ steps.changelog.outputs.skipped == 'false' }}
-          env:
-            GITHUB_TOKEN: ${{ secrets.github_token }}
-          with:
-            tag_name: ${{ steps.changelog.outputs.tag }}
-            release_name: ${{ steps.changelog.outputs.tag }}
-            body: ${{ steps.changelog.outputs.clean_changelog }}
-      
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
